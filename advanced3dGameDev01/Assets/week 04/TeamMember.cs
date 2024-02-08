@@ -11,14 +11,17 @@ public class TeamMember : MonoBehaviour
     float distanceToLeader,
         distanceToTarget;
     GameObject target;
+    int damage = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         // leader = GameObject.Find("player");
-        if (gameObject.tag == "teamMember") leader = GameObject.Find("player");
-        else leader = GameObject.Find("teamLeader");
+        if (gameObject.tag == "teamMember")
+            leader = GameObject.Find("player");
+        else
+            leader = GameObject.Find("teamLeader");
     }
 
     // Update is called once per frame
@@ -60,14 +63,23 @@ public class TeamMember : MonoBehaviour
                 anim.SetBool("targetDestroyed", true);
             }
         }
-        if (info.IsName("AttackTarget")) { 
-            if (target != null) {
+        if (info.IsName("AttackTarget"))
+        {
+            if (target != null)
+            {
                 GetComponent<NavMeshAgent>().isStopped = true;
                 gameObject.transform.LookAt(target.transform);
-                if (info.normalizedTime % 1.0 >= .98) {
-                    target.GetComponent<NPC>().DecreaseHealth(20);
+                if (info.normalizedTime % 1.0 >= .98)
+                {
+                    if (gameObject.tag == "team2")
+                        damage = 10;
+                    else
+                        damage = 20;
+                    target.GetComponent<NPC>().HitByOpponent(gameObject, damage);
                 }
-            } else {
+            }
+            else
+            {
                 anim.SetBool("targetDestroyed", true);
             }
         }
@@ -76,7 +88,8 @@ public class TeamMember : MonoBehaviour
     public void Attack(GameObject t)
     {
         target = t;
-        anim.SetTrigger("attackOneToOne");
+        // anim.SetTrigger("attackOneToOne");
+        anim.SetTrigger("respondToAttack");
     }
 
     public void Retreat()
