@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - wp
+  - BC
   layers:
   - Default
   - TransparentFX
