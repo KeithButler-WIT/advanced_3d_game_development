@@ -9,6 +9,15 @@ TagManager:
   - teamMember
   - target
   - team2
+  - saveData
+  - wall
+  - collect
+  - dialogue
+  - guard
+  - location
+  - npc
+  - deathZone
+  - checkPoint
   layers:
   - Default
   - TransparentFX

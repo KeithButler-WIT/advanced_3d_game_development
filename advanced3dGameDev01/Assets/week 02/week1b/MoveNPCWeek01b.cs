@@ -51,7 +51,7 @@ public class MoveNPCWeek01b : MonoBehaviour
         allBCs = GameObject.FindGameObjectsWithTag("BC");
         float minDistance = 2;
         bool detectedBC = false;
-
+    
         for (int i = 0; i < allBCs.Length; i++)
         {
             if (Vector3.Distance(transform.position, allBCs[i].transform.position) < minDistance)

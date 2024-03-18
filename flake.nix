@@ -22,14 +22,10 @@
           inherit inputs pkgs;
           modules = [
             {
-              # https://devenv.sh/reference/options/
               packages = with pkgs; [
                 pkgs.csharpier
               ];
-
-              languages.dotnet = {
-                enable = true;
-              };
+              languages.dotnet.enable = true;
             }
           ];
         };
