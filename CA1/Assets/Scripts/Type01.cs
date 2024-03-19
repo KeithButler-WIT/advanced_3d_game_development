@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Type01 : MonoBehaviour
+public class Type01 : NPC
 {
     GameObject target;
     GameObject[] wayPoints;
@@ -17,9 +17,6 @@ public class Type01 : MonoBehaviour
     public Type npcType = Type.Path;
     int WPCount = 0;
     float timer = 0;
-    public Animator anim;
-    AnimatorStateInfo info;
-
     public GameObject player;
     float distance;
     GameObject[] allBCs;
@@ -30,6 +27,10 @@ public class Type01 : MonoBehaviour
 
     Vector3 direction;
 
+    float attackTimer;
+    public GameObject bullet;
+    GameObject clone;
+    Rigidbody r;
 
     // Start is called before the first frame update
     void Start()
@@ -57,12 +58,10 @@ public class Type01 : MonoBehaviour
 
                 Listen();
                 Smell();
-                Look2();
+                Look();
 
                 if (info.IsName("Walking"))
                 {
-                    print(wayPoints.Length);
-                    print(WPCount);
                     target = wayPoints[WPCount];
                     if (Vector3.Distance(transform.position, target.transform.position) < 1)
                     {
@@ -78,6 +77,7 @@ public class Type01 : MonoBehaviour
                     GetComponent<NavMeshAgent>().isStopped = false;
                     GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
                     // gun.Shoot() shoot every 3 seconds
+                    Attack(target);
                 }
                 break;
             }
@@ -85,6 +85,20 @@ public class Type01 : MonoBehaviour
                 break;
         }
    }
+
+   public void Attack(GameObject t)
+    {
+        timer += Time.deltaTime;
+        if (timer > 3) {
+            anim.gameObject.transform.LookAt(GameObject.Find("player").transform.position);
+            clone = Instantiate(bullet, anim.rootPosition, Quaternion.identity) as GameObject;
+            r = clone.GetComponent<Rigidbody>();
+            r.AddForce(anim.gameObject.transform.forward * 1000);
+            // anim.SetTrigger("attackOneToOne");
+            // anim.SetTrigger("respondToAttack");
+            timer = 0;
+        }
+    }
 
     void Listen()
     {
@@ -117,25 +131,6 @@ public class Type01 : MonoBehaviour
 
     void Look()
     {
-        ray = new Ray();
-        ray.origin = transform.position + Vector3.up * 0.7f;
-        string objctInSight = "";
-        castingDistance = 20;
-        ray.direction = transform.forward * castingDistance;
-        Debug.DrawRay(ray.origin, ray.direction * castingDistance, Color.red);
-
-        if (Physics.Raycast(ray.origin, ray.direction, out hit, castingDistance))
-        {
-            objctInSight = hit.collider.gameObject.name;
-            if (objctInSight == "player")
-                anim.SetBool("playerDetected", true);
-            else
-                anim.SetBool("playerDetected", false);
-        }
-    }
-
-    void Look2()
-    {
         direction = (GameObject.Find("player").transform.position - transform.position).normalized;
         bool isInFieldOfView = (Vector3.Dot(transform.forward.normalized, direction) > 0.7f);
         Debug.DrawRay(transform.position, direction * 100, Color.green);
@@ -162,15 +157,3 @@ public class Type01 : MonoBehaviour
     }
 
 }
-//     void Update()
-//     {
-//         info = anim.GetCurrentAnimatorStateInfo(0);
-//         Listen();
-//         Smell();
-//         Look2();
-//         if (info.IsName("followPlayer"))
-//         {
-//             GetComponent<NavMeshAgent>().isStopped = false;
-//             GetComponent<NavMeshAgent>().SetDestination(player.transform.position);
-//         }
-//     }
