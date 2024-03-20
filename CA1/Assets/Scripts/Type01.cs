@@ -27,6 +27,7 @@ public class Type01 : NPC
 
     Vector3 direction;
 
+    float healthTimer = 0;
     float attackTimer;
     public GameObject bullet;
     GameObject clone;
@@ -49,6 +50,17 @@ public class Type01 : NPC
     {
         if (GetComponent<Animator>() != null)
             info = anim.GetCurrentAnimatorStateInfo(0);
+
+        healthTimer += Time.deltaTime;
+        if (healthTimer > 2)
+        {
+            healthTimer = 0;
+            SetHealth(health - 5);
+            //health -=2;
+            //anim.SetInteger("health", health);
+        }
+
+        if (health <= 0) Destroy(gameObject, 0);
 
         switch (npcType)
         {
@@ -154,6 +166,12 @@ public class Type01 : NPC
             else
                 anim.SetBool("playerDetected", false);
         }
+    }
+
+    void SetHealth(int newValue)
+    {
+        health = newValue;
+        // anim.SetInteger("health", health);
     }
 
 }

@@ -44,7 +44,7 @@ public class NPC : MonoBehaviour
     public void HitByOpponent(GameObject g, int amount)
     {
         DecreaseHealth(amount);
-        GetComponent<Type01>().Attack(g);
+        GetComponent<TeamMember>().Attack(g);
     }
 
 }

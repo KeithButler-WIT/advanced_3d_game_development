@@ -8,6 +8,10 @@ TagManager:
   - BC
   - healthPack
   - ammoPack
+  - saveData
+  - target
+  - teamMember
+  - team2
   layers:
   - Default
   - TransparentFX

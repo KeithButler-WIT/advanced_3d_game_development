@@ -8,78 +8,31 @@ public class GenerateMaze : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject wall;
-    public GameObject smallerWall;
-    public GameObject smallWater;
-    public GameObject tree;
     public GameObject NPC;
     public GameObject target;
+    public GameObject WP;
+    public GameObject Player;
+
     Color[,] colorOfPixel;
-    public Texture2D outlineImage;
     GameObject t;
 
     private int[,] worldMap = new int[,]
     {
         { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-        { 1, 0, 1, 0, 0, 0, 0, 0, 0, 1 },
-        { 1, 0, 1, 0, 1, 0, 1, 0, 0, 1 },
-        { 1, 0, 1, 0, 0, 2, 0, 0, 0, 1 },
-        { 1, 0, 1, 1, 1, 1, 0, 0, 0, 1 },
-        { 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-        { 1, 0, 1, 0, 1, 0, 1, 1, 1, 1 },
-        { 1, 0, 0, 1, 0, 0, 0, 0, 0, 1 },
-        { 1, 3, 1, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 4, 1, 0, 0, 0, 0, 0, 4, 1 },
+        { 1, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+        { 1, 0, 1, 0, 0, 2, 2, 0, 1, 1 },
+        { 1, 0, 1, 1, 0, 1, 2, 2, 0, 1 },
+        { 1, 0, 0, 0, 5, 0, 2, 0, 0, 1 },
+        { 1, 0, 1, 0, 1, 0, 0, 1, 1, 1 },
+        { 1, 4, 1, 0, 0, 0, 0, 0, 0, 1 },
+        { 1, 3, 1, 0, 0, 0, 0, 0, 4, 1 },
         { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
     };
 
     void Start()
     {
         GenerateFromArray();
-        //GenerateFromFile();
-        //GenerateFromImage();
-    }
-
-    void GenerateFromFile()
-    {
-        TextAsset t1 = (TextAsset)Resources.Load("maze", typeof(TextAsset));
-        string s = t1.text;
-        int i;
-        s = s.Replace(System.Environment.NewLine, "");
-        for (i = 0; i < s.Length; i++)
-        {
-            int column,
-                row;
-            column = i % 10;
-            row = i / 10;
-            if (s[i] == '1')
-            {
-                t = (GameObject)(
-                    Instantiate(
-                        wall,
-                        new Vector3(50 - column * 10, 1.5f, 50 - row * 10),
-                        Quaternion.identity
-                    )
-                );
-            }
-            else if (s[i] == '2')
-                t = (GameObject)(
-                    Instantiate(
-                        NPC,
-                        new Vector3(50 - column * 10, 1.5f, 50 - row * 10),
-                        Quaternion.identity
-                    )
-                );
-            else if (s[i] == '3')
-            {
-                t = (GameObject)(
-                    Instantiate(
-                        target,
-                        new Vector3(50 - column * 10, 1.5f, 50 - row * 10),
-                        Quaternion.identity
-                    )
-                );
-                t.name = "target";
-            }
-        }
     }
 
     void GenerateFromArray()
@@ -119,6 +72,22 @@ public class GenerateMaze : MonoBehaviour
                     );
                     t.name = "target";
                 }
+                else if (worldMap[i, j] == 4)
+                    t = (GameObject)(
+                        Instantiate(
+                            WP,
+                            new Vector3(50 - i * 10, 1.5f, 50 - j * 10),
+                            Quaternion.identity
+                        )
+                    );
+                else if (worldMap[i, j] == 5)
+                    t = (GameObject)(
+                        Instantiate(
+                            Player,
+                            new Vector3(50 - i * 10, 1.5f, 50 - j * 10),
+                            Quaternion.identity
+                        )
+                    );
             }
         }
     }

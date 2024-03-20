@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public float rotationSpeed;
     float timer;
     public GameObject bullet;
+    [Range(1,100)]
+    public int health;
 
     // Start is called before the first frame update
     void Start()

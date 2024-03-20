@@ -55,6 +55,16 @@ public class Type03 : NPC
         if (GetComponent<Animator>() != null)
             info = anim.GetCurrentAnimatorStateInfo(0);
 
+        healthTimer += Time.deltaTime;
+        if (healthTimer > 2)
+        {
+            healthTimer = 0;
+            SetHealth(health - 5);
+            //health -=2;
+            //anim.SetInteger("health", health);
+        }
+
+        if (health <= 0) Destroy(gameObject, 0);
 
         if (info.IsName("FollowPlayer"))
         {
@@ -94,10 +104,10 @@ public class Type03 : NPC
         {
             GetComponent<NavMeshAgent>().isStopped = false;
             //GetComponent<NavMeshAgent>().SetDestination (GameObject.Find("healthPack").transform.position);
-            healthPacks = (GameObject[])GameObject.FindGameObjectsWithTag("ammoPack");
+            ammoPacks = (GameObject[])GameObject.FindGameObjectsWithTag("ammoPack");
 
-            print("Nb Health Packs: " + healthPacks.Length);
-            if (healthPacks.Length == 0)
+            print("Nb Ammo Packs: " + ammoPacks.Length);
+            if (ammoPacks.Length == 0)
             {
                 anim.SetBool("ammoPackAvailable", false);
             }
@@ -111,7 +121,7 @@ public class Type03 : NPC
                 GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
                 if (Vector3.Distance(transform.position, target.transform.position) < 2)
                 {
-                    SetHealth(100);
+                    SetAmmo(10);
                     Destroy(target);
                 }
             }
@@ -121,16 +131,21 @@ public class Type03 : NPC
 
    public void Attack(GameObject t)
     {
-        timer += Time.deltaTime;
-        if (timer > 3) {
-            anim.gameObject.transform.LookAt(GameObject.Find("player").transform.position);
-            clone = Instantiate(bullet, anim.rootPosition, Quaternion.identity) as GameObject;
-            r = clone.GetComponent<Rigidbody>();
-            r.AddForce(anim.gameObject.transform.forward * 1000);
-            // anim.SetTrigger("attackOneToOne");
-            // anim.SetTrigger("respondToAttack");
-            timer = 0;
+        if (ammo>0) {
+            timer += Time.deltaTime;
+            if (timer > 3) {
+                anim.gameObject.transform.LookAt(GameObject.Find("player").transform.position);
+                clone = Instantiate(bullet, anim.rootPosition, Quaternion.identity) as GameObject;
+                r = clone.GetComponent<Rigidbody>();
+                r.AddForce(anim.gameObject.transform.forward * 1000);
+                // anim.SetTrigger("attackOneToOne");
+                // anim.SetTrigger("respondToAttack");
+                timer = 0;
+                SetAmmo(--ammo);
+                print(ammo);
+            }
         }
+        
     }
 
     void SelectPackToCollect(GameObject[] packs)

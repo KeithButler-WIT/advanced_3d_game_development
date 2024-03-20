@@ -6,19 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class SaveAndLoadData : MonoBehaviour
 {
-    const int PLAYER_NAME = 0;
-    const int PLAYER_POSITION = 1;
-    const int PLAYER_SCORE = 2;
-    const int PLAYER_LAST_LEVEL = 3;
-    const int PLAYER_DIFFICULITY_LEVEL = 4;
-
     Vector3 playerPosition;
     string playerName;
+    int playerHealth;
 
     public GameObject playerCharacter;
 
     DataToSave data;
     string jsonText;
+    string saveFile = "/Saves/gameData.json";
 
     void Awake()
     {
@@ -38,17 +34,16 @@ public class SaveAndLoadData : MonoBehaviour
         if (scene.name != "SaveData")
         {
             GameObject t = Instantiate(playerCharacter, playerPosition, Quaternion.identity);
-            t.name = playerName;
+            // t.name = playerName;
+            t.GetComponent<Player>().health = playerHealth;
+            // t.GetComponent<Player>().score = playerScore;
         }
     }
-
-    // Start is called before the first frame update
-    void Start() { }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.K))
             SaveDataJson();
         if (Input.GetKeyDown(KeyCode.L))
             LoadDataJson();
@@ -60,25 +55,28 @@ public class SaveAndLoadData : MonoBehaviour
         public int score;
         public Vector3 position;
         public string lastLevel;
+        // public int health;
     }
 
     void SaveDataJson()
     {
+        playerCharacter = GameObject.Find("Player");
         data = new DataToSave
         {
-            name = "John",
+            name = playerCharacter.name,
             score = 100,
-            position = new Vector3(10, 0, 10),
-            lastLevel = "Week6Level2"
+            position = playerCharacter.transform.position,
+            lastLevel = "Level01"
+            // health = 
         };
         jsonText = JsonUtility.ToJson(data);
-        File.WriteAllText(Application.dataPath + "/gameData.json", jsonText);
+        File.WriteAllText(Application.dataPath + saveFile, jsonText);
         Debug.Log(jsonText);
     }
 
     void LoadDataJson()
     {
-        string dataToRead = File.ReadAllText(Application.dataPath + "/gameData.json");
+        string dataToRead = File.ReadAllText(Application.dataPath + saveFile);
         DataToSave savedData = JsonUtility.FromJson<DataToSave>(dataToRead);
         Debug.Log(
             "Loaded Data: Name = "
@@ -89,10 +87,15 @@ public class SaveAndLoadData : MonoBehaviour
                 + savedData.position
                 + " lastlevel = "
                 + savedData.lastLevel
+                // + " health = "
+                // + savedData.health
         );
-        // playerName = saveData.name;
-        // playerPosition = saveData.position;
-        SceneManager.LoadScene("Week6Level2");
+        // playerName = savedData.name;
+        // playerPosition = savedData.position;
+        // playerCharacter.name = savedData.name;
+        // playerName = savedData.name;
+        playerPosition = savedData.position;
+        SceneManager.LoadScene("Scenes/Level 01");
     }
 
 }
