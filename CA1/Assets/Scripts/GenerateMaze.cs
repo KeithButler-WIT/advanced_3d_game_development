@@ -70,7 +70,7 @@ public class GenerateMaze : MonoBehaviour
                             Quaternion.identity
                         )
                     );
-                    t.name = "target";
+                    t.name = "teamLeader";
                 }
                 else if (worldMap[i, j] == 4)
                     t = (GameObject)(

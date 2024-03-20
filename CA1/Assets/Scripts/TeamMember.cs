@@ -27,6 +27,8 @@ public class TeamMember : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!leader) GameObject.Find("teamLeader");
+
         info = anim.GetCurrentAnimatorStateInfo(0);
         distanceToLeader = Vector3.Distance(transform.position, leader.transform.position);
         if (distanceToLeader < 5)
