@@ -1,0 +1,27 @@
+<quest name="Free the Villagers from the Tyran">
+ <stage id="0" name="Level 01" description="This is a Binary Tree example Level." startingPointForPlayer="-25,-1,-134">
+    <requirements>
+      
+    </requirements>
+
+    <results>
+      <result action="Talk to" target="NPC" xp="10"/>
+      <!-- <result action="Acquire a" target="Apple" xp="10"/>
+      <result action="Destroy one" target="NPC_Guard" xp="10"/>
+      <result action="Enter place called" target="yellow_house" xp="10"/> -->
+    </results>
+  </stage>
+  <stage id="1" name="Level 01" description="This is a Dynamic Gameplay example Level." startingPointForPlayer="-25,-1,-134">
+    <requirements>
+      
+    </requirements>
+
+    <results>
+      <result action="Talk to" target="Diana" xp="10"/>
+      <!-- <result action="Acquire a" target="Apple" xp="10"/>
+      <result action="Destroy one" target="NPC_Guard" xp="10"/>
+      <result action="Enter place called" target="yellow_house" xp="10"/> -->
+    </results>
+  </stage>
+ 
+</quest>

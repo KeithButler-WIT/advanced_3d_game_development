@@ -18,6 +18,10 @@ TagManager:
   - npc
   - deathZone
   - checkPoint
+  - zBridge
+  - xBridge
+  - WP
+  - itemToBeCollected
   layers:
   - Default
   - TransparentFX

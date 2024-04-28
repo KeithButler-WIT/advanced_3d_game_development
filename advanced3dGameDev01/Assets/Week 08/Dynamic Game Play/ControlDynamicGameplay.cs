@@ -7,7 +7,7 @@ public class ControlDynamicGameplay : MonoBehaviour
     GameObject[] allNpcs,
         allXBridges,
         allZBridges;
-    float npcSpeed,
+    public float npcSpeed,
         npcHearingRadius;
 
     [SerializeField]
@@ -21,6 +21,9 @@ public class ControlDynamicGameplay : MonoBehaviour
     bool userIsHighlySkilled;
     public int userSkillLevel = 5;
     float bridgeSize = 5f;
+
+    public int npcSpawnPeriod;
+    public int healthPackSpawnPeriod;
 
     public void ChangeXBridgeSize()
     {
@@ -38,6 +41,14 @@ public class ControlDynamicGameplay : MonoBehaviour
     public void ChangeZBridgeSize()
     {
         allZBridges = GameObject.FindGameObjectsWithTag("zBridge");
+        for (int i = 0; i < allZBridges.Length; i++)
+        {
+            allZBridges[i].transform.localScale = new Vector3(
+                bridgeSize,
+                allZBridges[i].transform.localScale.y,
+                allZBridges[i].transform.localScale.z
+            );
+        }
     }
 
     // Start is called before the first frame update
@@ -56,16 +67,22 @@ public class ControlDynamicGameplay : MonoBehaviour
                 npcSpeed = 2.5f;
                 npcHearingRadius = 3f;
                 bridgeSize = 5f;
+                npcSpawnPeriod = 60;
+                healthPackSpawnPeriod = 5;
                 break;
             case 2:
                 npcSpeed = 4.5f;
                 npcHearingRadius = 7f;
                 bridgeSize = 3f;
+                npcSpawnPeriod = 30;
+                healthPackSpawnPeriod = 20;
                 break;
             case 3:
                 npcSpeed = 6.5f;
                 npcHearingRadius = 10f;
                 bridgeSize = 1.5f;
+                npcSpawnPeriod = 10;
+                healthPackSpawnPeriod = 30;
                 break;
             default:
                 break;
@@ -73,6 +90,21 @@ public class ControlDynamicGameplay : MonoBehaviour
 
         changeNPCSpeed();
         changeNPCHearingRadius();
+        ChangeZBridgeSize();
+        ChangeXBridgeSize();
+        ChangeNPCSpawnPeriod();
+        ChangeHealthPacksSpawnPeriod();
+    }
+
+    void ChangeHealthPacksSpawnPeriod()
+    {
+        GameObject.Find("spawnHealthPacks").GetComponent<SpawnHealthPacks>().HPCheckPeriod =
+            healthPackSpawnPeriod;
+    }
+
+    void ChangeNPCSpawnPeriod()
+    {
+        GameObject.Find("spawnNPCs").GetComponent<SpawnNPCs>().spawnPeriod = npcSpawnPeriod;
     }
 
     void CheckUserProgress()
